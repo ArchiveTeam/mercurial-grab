@@ -13,6 +13,7 @@ local abortgrab = false
 
 local listkeys = nil
 local bundle2 = nil
+local heads = nil
 local done_main = false
 local httpheadersize = 1024
 
@@ -141,15 +142,17 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
     elseif string.match(url, "%?cmd=listkeys&namespace=namespaces") then
       listkeys = read_file(file)
     elseif string.match(url, "%?cmd=heads") then
-      local data = string.match(read_file(file), "(.-)%s+$")
-      check_mercurial("changegroup", "roots=" .. data)
-      check_mercurial("known", "nodes=" .. data)
-      --check_mercurial("changegroupsubset", "bases=" .. data)
+      heads = string.match(read_file(file), "(.-)%s+$")
+      check_mercurial("changegroup", "roots=" .. heads)
+      check_mercurial("known", "nodes=" .. heads)
+      --check_mercurial("changegroupsubset", "bases=" .. heads)
     elseif string.match(url, "%?cmd=clonebundles") then
       local data = read_file(file)
-      check(string.match(data, "^([^%s]*)"))
+      for newurl in string.gmatch(data, "(https?://[^%s]+)") do
+        check(newurl)
+      end
     end
-    if bundle2 ~= nil and listkeys ~= nil then
+    if bundle2 ~= nil and listkeys ~= nil and heads ~= nil then
       namespaces = ""
       for namespace in string.gmatch(listkeys, "([^%s]+)") do
         if namespace ~= "obsolete" then

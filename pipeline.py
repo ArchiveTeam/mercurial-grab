@@ -139,11 +139,15 @@ class JoinWarcs(SimpleTask):
         SimpleTask.__init__(self, 'JoinWarcs')
 
     def process(self, item):
-        with open('%(item_dir)s/%(warc_file_base)s.warc.gz' % item, 'wb') as fout:
+        filename_in = '%(item_dir)s/%(warc_file_base)s.warc.gz' % item
+        print(filename_in)
+        with open(filename_in, 'wb') as fout:
             for filename in os.listdir(item['item_dir']):
-                if not filename.endswith('.warc.gz'):
+                if filename == item['warc_file_base'] + '.warc.gz' \
+                    or not filename.endswith('.warc.gz'):
                     continue
                 with open(item['item_dir'] + '/' + filename, 'rb') as fin:
+                    print(fin.name)
                     shutil.copyfileobj(fin, fout)
 
 
@@ -187,7 +191,7 @@ class WgetArgs(object):
             '--tries', 'inf',
             '--span-hosts',
             '--waitretry', '30',
-            '--warc-file', ItemInterpolation('%(item_dir)s/%(warc_file_base)s-partial'),
+            '--warc-file', ItemInterpolation('%(item_dir)s/%(warc_file_base)s-main'),
             '--warc-header', 'operator: Archive Team',
             '--warc-header', 'mercurial-dld-script-version: ' + VERSION,
             '--warc-header', ItemInterpolation('mercurial-item: %(item_name)s'),
