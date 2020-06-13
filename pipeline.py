@@ -134,6 +134,19 @@ class MoveFiles(SimpleTask):
         shutil.rmtree('%(item_dir)s' % item)
 
 
+class JoinWarcs(SimpleTask):
+    def __init__(self):
+        SimpleTask.__init__(self, 'JoinWarcs')
+
+    def process(self, item):
+        with open('%(item_dir)s/%(warc_file_base)s.warc.gz' % item, 'wb') as fout:
+            for filename in os.listdir(item['item_dir']):
+                if not filename.endswith('.warc.gz'):
+                    continue
+                with open(item['item_dir'] + '/' + filename, 'rb') as fin:
+                    shutil.copyfileobj(fin, fout)
+
+
 def get_hash(filename):
     with open(filename, 'rb') as in_file:
         return hashlib.sha1(in_file.read()).hexdigest()
@@ -174,7 +187,7 @@ class WgetArgs(object):
             '--tries', 'inf',
             '--span-hosts',
             '--waitretry', '30',
-            '--warc-file', ItemInterpolation('%(item_dir)s/%(warc_file_base)s'),
+            '--warc-file', ItemInterpolation('%(item_dir)s/%(warc_file_base)s-partial'),
             '--warc-header', 'operator: Archive Team',
             '--warc-header', 'mercurial-dld-script-version: ' + VERSION,
             '--warc-header', ItemInterpolation('mercurial-item: %(item_name)s'),
@@ -187,6 +200,7 @@ class WgetArgs(object):
         item['item_value'] = item_value
 
         wget_args.extend(['--warc-header', 'mercurial-repository: ' + str(item_value)])
+        wget_args.extend(['--warc-header', 'warc-type: main'])
         wget_args.append(item_value + '?cmd=capabilities')
 
         if 'bind_address' in globals():
@@ -223,9 +237,10 @@ pipeline = Pipeline(
         env={
             'item_dir': ItemValue('item_dir'),
             'item_value': ItemValue('item_value'),
-            'warc_file_base': ItemValue('warc_file_base'),
+            'warc_file_base': ItemValue('warc_file_base')
         }
     ),
+    JoinWarcs(),
     PrepareStatsForTracker(
         defaults={'downloader': downloader, 'version': VERSION},
         file_groups={
