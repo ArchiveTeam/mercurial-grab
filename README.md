@@ -59,9 +59,10 @@ Package `libzstd-dev` version 1.4.4 is required which is currently available fro
 
     adduser --system --group --shell /bin/bash archiveteam
     apt-get update \
-    && apt-get install -y git-core libgnutls-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev flex autoconf autopoint texinfo gperf lua-socket rsync \
+    && apt-get install -y git-core libgnutls-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev flex autoconf autopoint texinfo gperf lua-socket rsync luarocks \
     && apt-get -t buster-backports install zstd libzstd-dev libzstd1
     pip install --upgrade seesaw zstandard
+    luarocks install cgilua
     su -c "cd /home/archiveteam; git clone https://github.com/ArchiveTeam/mercurial-grab.git; cd mercurial-grab; ./get-wget-lua.sh" archiveteam
     screen su -c "cd /home/archiveteam/mercurial-grab/; run-pipeline pipeline.py --concurrent 2 --address '127.0.0.1' YOURNICKHERE" archiveteam
     [... ctrl+A D to detach ...]
@@ -70,7 +71,7 @@ In __Debian Jessie, Ubuntu 18.04 Bionic and above__, the `libgnutls-dev` package
 
     adduser --system --group --shell /bin/bash archiveteam
     apt-get update \
-    && apt-get install -y git-core libgnutls28-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev flex autoconf autopoint texinfo gperf lua-socket rsync \
+    && apt-get install -y git-core libgnutls28-dev lua5.1 liblua5.1-0 liblua5.1-0-dev screen python-dev python-pip bzip2 zlib1g-dev flex autoconf autopoint texinfo gperf lua-socket rsync luarocks \
     && apt-get -t buster-backports install zstd libzstd-dev libzstd1
     [... pretty much the same as above ...]
 
