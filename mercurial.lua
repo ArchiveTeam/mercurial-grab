@@ -206,7 +206,7 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
   if status_code ~= 200 and status_code ~= 414 then
     io.stdout:write("Server returned "..http_stat.statcode.." ("..err.."). Sleeping.\n")
     io.stdout:flush()
-    local maxtries = 10
+    local maxtries = 5
     if tries > maxtries then
       io.stdout:write("\nI give up...\n")
       io.stdout:flush()

@@ -54,7 +54,7 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20200614.04'
+VERSION = '20200614.05'
 USER_AGENT = 'mercurial/proto-1.0 (Mercurial 5.3.1)'
 TRACKER_ID = 'mercurial'
 TRACKER_HOST = 'trackerproxy.meo.ws'
@@ -237,7 +237,7 @@ pipeline = Pipeline(
     PrepareDirectories(warc_prefix='mercurial'),
     WgetDownload(
         WgetArgs(),
-        max_tries=2,
+        max_tries=1,
         accept_on_exit_code=[0, 4, 8],
         env={
             'item_dir': ItemValue('item_dir'),
