@@ -1,15 +1,20 @@
 dofile("table_show.lua")
 dofile("urlcode.lua")
 
-local item_value = os.getenv('item_value')
-local item_dir = os.getenv('item_dir')
-local warc_file_base = os.getenv('warc_file_base')
+local item_value = os.getenv("item_value")
+local item_dir = os.getenv("item_dir")
+local warc_file_base = os.getenv("warc_file_base")
 
 local url_count = 0
 local tries = 0
 local downloaded = {}
 local addedtolist = {}
 local abortgrab = false
+
+if cgilua == nil then
+  io.stdout:write("cgilua is not installed.\n")
+  abortgrab = true
+end
 
 local listkeys = nil
 local bundle2 = nil
