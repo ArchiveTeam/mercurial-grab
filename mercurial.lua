@@ -84,7 +84,7 @@ run_external_wget = function(url, args, suffix)
   command = command .. " '" .. url .. "'"
   local r = io.popen(command)
   for line in r:lines() do
-    if string.match(line, "I give up") then
+    if not string.match(line, "%(external%)") then
       abortgrab = true
     end
     io.stdout:write(line .. "\n")
@@ -199,6 +199,7 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
 
   if abortgrab == true then
     io.stdout:write("ABORTING...\n")
+    io.stdout:flush()
     return wget.actions.ABORT
   end
   
@@ -208,6 +209,8 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
     local maxtries = 10
     if tries > maxtries then
       io.stdout:write("\nI give up...\n")
+      io.stdout:flush()
+      io.stdout:write("ABORTING...\n")
       io.stdout:flush()
       tries = 0
       return wget.actions.ABORT
@@ -231,6 +234,8 @@ end
 
 wget.callbacks.before_exit = function(exit_status, exit_status_string)
   if abortgrab == true then
+    io.stdout:write("ABORTING...\n")
+    io.stdout:flush()
     return wget.exits.IO_FAIL
   end
   return exit_status

@@ -54,7 +54,7 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20200614.03'
+VERSION = '20200614.04'
 USER_AGENT = 'mercurial/proto-1.0 (Mercurial 5.3.1)'
 TRACKER_ID = 'mercurial'
 TRACKER_HOST = 'trackerproxy.meo.ws'
@@ -149,6 +149,7 @@ class JoinWarcs(SimpleTask):
                 with open(item['item_dir'] + '/' + filename, 'rb') as fin:
                     print(fin.name)
                     shutil.copyfileobj(fin, fout)
+        assert os.path.getsize(filename_in) > 0
 
 
 def get_hash(filename):
