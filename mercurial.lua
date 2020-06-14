@@ -129,7 +129,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
       check(item_value .. "?cmd=hello")
       check(item_value .. "?cmd=stream_out")
       check_mercurial("listkeys", "namespace=namespaces")
-      check_mercurial("batch", "cmds=heads ;known nodes=")
+      check_mercurial("batch", "cmds=" .. cgilua.urlcode.escape("heads ;known nodes="))
       check(item_value .. "?cmd=clonebundles")
       check(item_value .. "?cmd=branchmap")
       for capability in string.gmatch(data, "([^%s]+)") do
@@ -167,7 +167,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
         "stream=1" ..
         "&cg=0" ..
         "&obsmarkers=1" ..
-        "&bundlecaps=HG20," .. bundle2 ..
+        "&bundlecaps=HG20," .. cgilua.urlcode.escape(bundle2) ..
         "&listkeys=" .. namespaces ..
         "&bookmarks=1"
       )
