@@ -197,11 +197,13 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
   io.stdout:write(url_count .. "=" .. status_code .. " " .. url["url"] .. "  \n")
   io.stdout:flush()
 
-  if abortgrab == true then
+  if abortgrab == true or downloaded[url["url"]] then
     io.stdout:write("ABORTING...\n")
     io.stdout:flush()
     return wget.actions.ABORT
   end
+
+  downloaded[url["url"]] = true
   
   if status_code ~= 200 and status_code ~= 414 then
     io.stdout:write("Server returned "..http_stat.statcode.." ("..err.."). Sleeping.\n")
