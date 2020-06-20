@@ -148,7 +148,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
       listkeys = read_file(file)
     elseif string.match(url, "%?cmd=heads") then
       heads = string.match(read_file(file), "(.-)%s+$")
-      check_mercurial("changegroup", "roots=" .. heads)
+      --check_mercurial("changegroup", "roots=" .. heads)
       check_mercurial("known", "nodes=" .. heads)
       --check_mercurial("changegroupsubset", "bases=" .. heads)
     elseif string.match(url, "%?cmd=clonebundles") then
@@ -205,7 +205,7 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
 
   downloaded[url["url"]] = true
   
-  if status_code ~= 200 and status_code ~= 414 then
+  if status_code ~= 200 and status_code ~= 404 and status_code ~= 414 then
     io.stdout:write("Server returned "..http_stat.statcode.." ("..err.."). Sleeping.\n")
     io.stdout:flush()
     local maxtries = 2
