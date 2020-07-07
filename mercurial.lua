@@ -186,6 +186,9 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
   status_code = http_stat["statcode"]
 
   if string.match(url["url"], "%?cmd=capabilities$") then
+    if status_code == 0 and err == 'AUTHFAILED' then
+      return wget.actions.EXIT
+    end
     done_main = true
   end
 
