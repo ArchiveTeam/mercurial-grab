@@ -148,9 +148,9 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
       listkeys = read_file(file)
     elseif string.match(url, "%?cmd=heads") then
       heads = string.match(read_file(file), "(.-)%s+$")
-      --check_mercurial("changegroup", "roots=" .. string.gsub(heads, " ", "%%20"))
-      check_mercurial("known", "nodes=" .. string.gsub(heads, " ", "%%20"))
-      --check_mercurial("changegroupsubset", "bases=" .. string.gsub(heads, " ", "%%20"))
+      --check_mercurial("changegroup", "roots=" .. cgilua.urlcode.escape(heads))
+      check_mercurial("known", "nodes=" .. cgilua.urlcode.escape(heads))
+      --check_mercurial("changegroupsubset", "bases=" .. cgilua.urlcode.escape(heads))
     elseif string.match(url, "%?cmd=clonebundles") then
       local data = read_file(file)
       for newurl in string.gmatch(data, "(https?://[^%s]+)") do
