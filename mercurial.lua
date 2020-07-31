@@ -121,7 +121,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
 
   local function check_mercurial(cmd, args)
     local full_url = item_value .. "?cmd=" .. cmd .. "&" .. args
-    if string.len(full_url) < 8100 then
+    if string.len(full_url) < 4080 then
       check(full_url)
     end
     run_external_wget(item_value .. "?cmd=" .. cmd, args, cmd)
