@@ -206,8 +206,6 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
     io.stdout:flush()
     return wget.actions.ABORT
   end
-
-  downloaded[url["url"]] = true
   
   if status_code ~= 200 and status_code ~= 404 and status_code ~= 414 then
     io.stdout:write("Server returned "..http_stat.statcode.." ("..err.."). Sleeping.\n")
@@ -226,6 +224,8 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
       return wget.actions.CONTINUE
     end
   end
+
+  downloaded[url["url"]] = true
 
   tries = 0
 
