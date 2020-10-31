@@ -44,7 +44,8 @@ WGET_AT = find_executable(
     [
         'GNU Wget 1.20.3-at.20200401.01',
         'GNU Wget 1.20.3-at.20200804.01',
-        'GNU Wget 1.20.3-at.20200902.01'
+        'GNU Wget 1.20.3-at.20200902.01',
+        'GNU Wget 1.20.3-at.20201030.01'
     ],
     ['./wget-at']
 )
@@ -58,7 +59,7 @@ if not WGET_AT:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = '20200902.01'
+VERSION = '20201031.01'
 USER_AGENT = 'mercurial/proto-1.0 (Mercurial 5.3.1)'
 TRACKER_ID = 'mercurial'
 TRACKER_HOST = 'trackerproxy.meo.ws'
